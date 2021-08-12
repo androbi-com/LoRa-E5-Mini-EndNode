@@ -30,3 +30,8 @@ with the Seeed board.
 
 This software component is licensed by ST under Ultimate Liberty license
 SLA0044, the "License";  https://www.st.com/SLA0044
+
+* [The Board](https://wiki.seeedstudio.com/LoRa_E5_mini/)
+* [Application Note AN5406](https://www.st.com/resource/en/application_note/dm00660451-how-to-build-a-lora-application-with-stm32cubewl-stmicroelectronics.pdf)
+* [AT commands for stock firmware](https://files.seeedstudio.com/products/317990687/res/LoRa-E5%20AT%20Command%20Specification_V1.0%20.pdf)
+* [Post in ST community about v1.1.0 vs. v1.0.0](https://community.st.com/s/question/0D53W00000zGZk4SAG/how-to-on-stm32cubefwwlv110)
