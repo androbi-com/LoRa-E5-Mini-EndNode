@@ -39,7 +39,7 @@
 #include "sys_sensors.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "i2c.h"
 /* USER CODE END Includes */
 
 /* External variables ---------------------------------------------------------*/
@@ -352,18 +352,20 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
 
 	APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### ========== MCPS-Indication ==========\r\n");
 
-	/*
+
 	APP_LOG(TS_OFF, VLEVEL_M, "###### D/L FRAME:%04d\r\n",
 			params->DownlinkCounter);
 	APP_LOG(TS_OFF, VLEVEL_M, "###### SLOT:%s\r\n",
 			slotStrings[params->RxSlot]);
+
 	APP_LOG(TS_OFF, VLEVEL_M, "###### PORT:%d\r\n",
 			appData->Port);
 	APP_LOG(TS_OFF, VLEVEL_M, "###### DR:%d\r\n",
 			params->Datarate);
+
 	APP_LOG(TS_OFF, VLEVEL_M, "###### RSSI:%d | SNR:%d\r\n",
 			params->Rssi, params->Snr);
-	*/
+
 	switch (appData->Port)
 	{
 	  case LORAWAN_SWITCH_CLASS_PORT:
@@ -419,9 +421,11 @@ static void SendTxData(void)
 {
   /* USER CODE BEGIN SendTxData_1 */
   /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-  uint16_t pressure = 0;
-  int16_t temperature = 0;
-  sensor_t sensor_data;
+  //uint16_t pressure = 0;
+  //int16_t temperature = 0;
+  //sensor_t sensor_data;
+  float aht20_hum = 0.0, aht20_temp = 100.0;
+
   UTIL_TIMER_Time_t nextTxIn = 0;
 
 #ifdef CAYENNE_LPP
@@ -434,23 +438,30 @@ static void SendTxData(void)
   uint16_t altitudeGps = 0;
 #endif /* CAYENNE_LPP */
 
-  EnvSensors_Read(&sensor_data);
-  temperature = (SYS_GetTemperatureLevel() >> 8);
-  pressure    = (uint16_t)(sensor_data.pressure * 100 / 10);      /* in hPa / 10 */
+  if (initAHT20())
+  {
+	  readAHT20(&aht20_hum, &aht20_temp);
+  }
+
+  //EnvSensors_Read(&sensor_data);
+  //temperature = (SYS_GetTemperatureLevel() >> 8);
+  //pressure    = (uint16_t)(sensor_data.pressure * 100 / 10);      /* in hPa / 10 */
 
   AppData.Port = LORAWAN_USER_APP_PORT;
 
 #ifdef CAYENNE_LPP
   CayenneLppReset();
-  CayenneLppAddBarometricPressure(channel++, pressure);
-  CayenneLppAddTemperature(channel++, temperature);
-  CayenneLppAddRelativeHumidity(channel++, (uint16_t)(sensor_data.humidity));
+  //CayenneLppAddBarometricPressure(channel++, pressure);
+  //CayenneLppAddTemperature(channel++, temperature);
+  //CayenneLppAddRelativeHumidity(channel++, (uint16_t)(sensor_data.humidity));
+  CayenneLppAddTemperature(channel++, (uint16_t) 10*aht20_temp);
+  CayenneLppAddRelativeHumidity(channel++, (uint16_t)10*aht20_hum);
 
   if ((LmHandlerParams.ActiveRegion != LORAMAC_REGION_US915) && (LmHandlerParams.ActiveRegion != LORAMAC_REGION_AU915)
 	  && (LmHandlerParams.ActiveRegion != LORAMAC_REGION_AS923))
   {
 	CayenneLppAddDigitalInput(channel++, GetBatteryLevel());
-	CayenneLppAddDigitalOutput(channel++, AppLedStateOn);
+	//CayenneLppAddDigitalOutput(channel++, AppLedStateOn);
   }
 
   CayenneLppCopy(AppData.Buffer);

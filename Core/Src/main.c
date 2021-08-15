@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dma.h"
+#include "i2c.h"
 #include "app_lorawan.h"
 #include "subghz.h"
 #include "gpio.h"
@@ -91,6 +92,7 @@ int main(void)
   MX_SUBGHZ_Init();
   MX_LoRaWAN_Init();
   MX_DMA_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */

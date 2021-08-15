@@ -50,7 +50,7 @@ extern "C" {
 /*!
  * Defines the application data transmission duty cycle. 10s, value in [ms].
  */
-#define APP_TX_DUTYCYCLE                            30000
+#define APP_TX_DUTYCYCLE                            60000
 
 /*!
  * LoRaWAN User application port
@@ -105,7 +105,7 @@ extern "C" {
 #define LORAWAN_DEFAULT_PING_SLOT_PERIODICITY       4
 
 /* USER CODE BEGIN EC */
-
+#define CAYENNE_LPP
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
