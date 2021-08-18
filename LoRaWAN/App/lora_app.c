@@ -556,7 +556,7 @@ static void OnJoinTimerLedEvent(void *context)
 #if defined(USE_BSP_DRIVER)
   BSP_LED_Toggle(LED_RED) ;
 #else
-  // SYS_LED_Toggle(SYS_LED_RED) ;
+  //SYS_LED_Toggle(SYS_LED_RED) ;
 #endif
 }
 

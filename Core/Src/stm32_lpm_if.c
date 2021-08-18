@@ -28,6 +28,7 @@
 /* USER CODE BEGIN Includes */
   /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 #include "i2c.h"
+#include "sys_app.h"
   /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 /* USER CODE END Includes */
 
@@ -89,13 +90,15 @@ void PWR_ExitOffMode(void)
 {
   /* USER CODE BEGIN ExitOffMode_1 */
 
-  /* USER CODE END ExitOffMode_1 */
+	/* USER CODE END ExitOffMode_1 */
 }
 
 void PWR_EnterStopMode(void)
 {
   /* USER CODE BEGIN EnterStopMode_1 */
-
+	 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
+	 HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
+	 //HAL_I2C_MspDeInit(&hi2c2);
   /* USER CODE END EnterStopMode_1 */
   HAL_SuspendTick();
   /* Clear Status Flag before entering STOP/STANDBY Mode */
@@ -128,6 +131,9 @@ void PWR_ExitStopMode(void)
   /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
   // resume I2C after stop mode; maybe this is more than necessary, see for example vcom_Resume()
   MX_I2C2_Init();
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
+
   /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
   /* USER CODE END ExitStopMode_2 */
 }
@@ -135,7 +141,7 @@ void PWR_ExitStopMode(void)
 void PWR_EnterSleepMode(void)
 {
   /* USER CODE BEGIN EnterSleepMode_1 */
-
+  //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
   /* USER CODE END EnterSleepMode_1 */
   /* Suspend sysTick */
   HAL_SuspendTick();
@@ -157,6 +163,7 @@ void PWR_ExitSleepMode(void)
   HAL_ResumeTick();
 
   /* USER CODE BEGIN ExitSleepMode_2 */
+  //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);
 
   /* USER CODE END ExitSleepMode_2 */
 }

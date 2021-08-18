@@ -129,7 +129,6 @@ void SystemApp_Init(void)
 #endif /* LOW_POWER_DISABLE */
 
   /* USER CODE BEGIN SystemApp_Init_2 */
-
   /* USER CODE END SystemApp_Init_2 */
 }
 
