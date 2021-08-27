@@ -40,6 +40,7 @@
 
 /* USER CODE BEGIN Includes */
 #include "i2c.h"
+#include "usart.h"
 /* USER CODE END Includes */
 
 /* External variables ---------------------------------------------------------*/
@@ -425,7 +426,7 @@ static void SendTxData(void)
   //int16_t temperature = 0;
   //sensor_t sensor_data;
   float aht20_hum = 0.0, aht20_temp = 100.0;
-
+  uint16_t pms1=0, pms25=0, pms10=0;
   UTIL_TIMER_Time_t nextTxIn = 0;
 
 #ifdef CAYENNE_LPP
@@ -443,6 +444,20 @@ static void SendTxData(void)
 	  readAHT20(&aht20_hum, &aht20_temp);
   }
 
+  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: NOW READ\r\n");
+
+  if (readPMS()) {
+	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: read ok\r\n");
+	  pms1 = getDataBin(0);
+	  pms25 = getDataBin(1);
+	  pms10 = getDataBin(2);
+  } else {
+	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: read failed\r\n");
+	  pms1 = getDataBin(0);
+	  pms25 = 0;
+	  pms10 = 0;
+  }
+
   //EnvSensors_Read(&sensor_data);
   //temperature = (SYS_GetTemperatureLevel() >> 8);
   //pressure    = (uint16_t)(sensor_data.pressure * 100 / 10);      /* in hPa / 10 */
@@ -454,8 +469,11 @@ static void SendTxData(void)
   //CayenneLppAddBarometricPressure(channel++, pressure);
   //CayenneLppAddTemperature(channel++, temperature);
   //CayenneLppAddRelativeHumidity(channel++, (uint16_t)(sensor_data.humidity));
-  CayenneLppAddTemperature(channel++, (uint16_t) 10*aht20_temp);
-  CayenneLppAddRelativeHumidity(channel++, (uint16_t)10*aht20_hum);
+  CayenneLppAddTemperatureFloat(channel++, aht20_temp);
+  CayenneLppAddRelativeHumidityFloat(channel++, aht20_hum);
+  CayenneLppAddLuminosity(channel++, pms1);
+  CayenneLppAddLuminosity(channel++, pms25);
+  CayenneLppAddLuminosity(channel++, pms10);
 
   if ((LmHandlerParams.ActiveRegion != LORAMAC_REGION_US915) && (LmHandlerParams.ActiveRegion != LORAMAC_REGION_AU915)
 	  && (LmHandlerParams.ActiveRegion != LORAMAC_REGION_AS923))

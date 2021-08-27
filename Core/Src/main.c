@@ -23,11 +23,12 @@
 #include "i2c.h"
 #include "app_lorawan.h"
 #include "subghz.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "sys_app.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -93,6 +94,12 @@ int main(void)
   MX_LoRaWAN_Init();
   MX_DMA_Init();
   MX_I2C2_Init();
+  MX_USART2_UART_Init();
+  if (initPMS()) {
+	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: INIT OK\r\n");
+  } else {
+	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: INIT FAILED\r\n");
+  }
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */

@@ -90,7 +90,7 @@ void PWR_ExitOffMode(void)
 {
   /* USER CODE BEGIN ExitOffMode_1 */
 
-	/* USER CODE END ExitOffMode_1 */
+  /* USER CODE END ExitOffMode_1 */
 }
 
 void PWR_EnterStopMode(void)
@@ -129,8 +129,14 @@ void PWR_ExitStopMode(void)
   vcom_Resume();
   /* USER CODE BEGIN ExitStopMode_2 */
   /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-  // resume I2C after stop mode; maybe this is more than necessary, see for example vcom_Resume()
+  // resume I2C & USART2 after stop mode; maybe this is more than necessary, see for example vcom_Resume()
   MX_I2C2_Init();
+  //MX_USART2_UART_Init();
+  if (initPMS()) {
+	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: REINIT OK\r\n");
+  } else {
+	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: REINIT FAILED\r\n");
+  }
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
 

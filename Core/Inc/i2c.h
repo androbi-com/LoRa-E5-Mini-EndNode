@@ -28,7 +28,9 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 #include <stdbool.h>
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 /* USER CODE END Includes */
 
 extern I2C_HandleTypeDef hi2c2;

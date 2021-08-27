@@ -89,6 +89,9 @@ uint8_t CayenneLppAddGps(uint8_t channel, int32_t latitude, int32_t longitude, i
 
 /* USER CODE BEGIN EFP */
 
+uint8_t CayenneLppAddTemperatureFloat(uint8_t channel, float celsius);
+uint8_t CayenneLppAddRelativeHumidityFloat(uint8_t channel, float rh);
+
 /* USER CODE END EFP */
 
 #ifdef __cplusplus

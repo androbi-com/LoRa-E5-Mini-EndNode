@@ -213,7 +213,12 @@ void vcom_Resume(void)
     Error_Handler();
   }
   /* USER CODE BEGIN vcom_Resume_2 */
-
+  /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
   /* USER CODE END vcom_Resume_2 */
 }
 

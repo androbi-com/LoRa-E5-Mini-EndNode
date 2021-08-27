@@ -391,6 +391,44 @@ uint8_t CayenneLppAddGps(uint8_t channel, int32_t latitude, int32_t longitude, i
 
 /* USER CODE BEGIN EF */
 
+uint8_t CayenneLppAddTemperatureFloat(uint8_t channel, float celsius)
+{
+  /* USER CODE BEGIN CayenneLppAddTemperature_1 */
+
+  /* USER CODE END CayenneLppAddTemperature_1 */
+  if ((CayenneLppCursor + LPP_TEMPERATURE_SIZE) > CAYENNE_LPP_MAXBUFFER_SIZE)
+  {
+    return 0;
+  }
+  int16_t val = (int16_t) (celsius * 10);
+  CayenneLppBuffer[CayenneLppCursor++] = channel;
+  CayenneLppBuffer[CayenneLppCursor++] = LPP_TEMPERATURE;
+  CayenneLppBuffer[CayenneLppCursor++] = val >> 8;
+  CayenneLppBuffer[CayenneLppCursor++] = val;
+  /* USER CODE BEGIN CayenneLppAddTemperature_2 */
+
+  /* USER CODE END CayenneLppAddTemperature_2 */
+  return CayenneLppCursor;
+}
+
+uint8_t CayenneLppAddRelativeHumidityFloat(uint8_t channel, float rh)
+{
+  /* USER CODE BEGIN CayenneLppAddRelativeHumidity_1 */
+
+  /* USER CODE END CayenneLppAddRelativeHumidity_1 */
+  if ((CayenneLppCursor + LPP_RELATIVE_HUMIDITY_SIZE) > CAYENNE_LPP_MAXBUFFER_SIZE)
+  {
+    return 0;
+  }
+  CayenneLppBuffer[CayenneLppCursor++] = channel;
+  CayenneLppBuffer[CayenneLppCursor++] = LPP_RELATIVE_HUMIDITY;
+  CayenneLppBuffer[CayenneLppCursor++] = (uint8_t) (rh * 2);
+  /* USER CODE BEGIN CayenneLppAddRelativeHumidity_2 */
+
+  /* USER CODE END CayenneLppAddRelativeHumidity_2 */
+  return CayenneLppCursor;
+}
+
 /* USER CODE END EF */
 
 /* Private Functions Definition -----------------------------------------------*/
