@@ -28,44 +28,19 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-#include <stdbool.h>
-/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
 /* USER CODE END Includes */
 
 extern I2C_HandleTypeDef hi2c2;
 
 /* USER CODE BEGIN Private defines */
-/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
-#define TXBUFFERSIZE 3
-#define RXBUFFERSIZE 6
-
-#define AHT20_I2C_ADDRESS 0x38
-#define AHT20_CMD_TRIGGER 0xAC
-#define AHT20_CMD_SOFTRESET 0xBA
-#define AHT20_CMD_CALIBRATE 0xBE
-#define AHT20_STATUS_BUSY 0x80
-#define AHT20_STATUS_CALIBRATED 0x08
-
-// transmission buffers
-uint8_t aTxBuffer[TXBUFFERSIZE];
-uint8_t aRxBuffer[RXBUFFERSIZE];
-
-/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 /* USER CODE END PV */
 /* USER CODE END Private defines */
 
 void MX_I2C2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-
-uint8_t getAHT20Status();
-bool initAHT20();
-bool readAHT20(float *humidity, float *temperature);
-
-/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

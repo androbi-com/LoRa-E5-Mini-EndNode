@@ -39,8 +39,13 @@
 #include "sys_sensors.h"
 
 /* USER CODE BEGIN Includes */
-#include "i2c.h"
-#include "usart.h"
+#include <stdlib.h>
+#ifdef USE_AHT20_SENSOR
+  #include "aht20.h"
+#endif
+#ifdef USE_PMS_SENSOR
+  #include "usart.h"
+#endif
 /* USER CODE END Includes */
 
 /* External variables ---------------------------------------------------------*/
@@ -422,12 +427,10 @@ static void SendTxData(void)
 {
   /* USER CODE BEGIN SendTxData_1 */
   /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-  //uint16_t pressure = 0;
-  //int16_t temperature = 0;
-  //sensor_t sensor_data;
   float aht20_hum = 0.0, aht20_temp = 100.0;
   uint16_t pms1=0, pms25=0, pms10=0;
   UTIL_TIMER_Time_t nextTxIn = 0;
+
 
 #ifdef CAYENNE_LPP
   uint8_t channel = 0;
@@ -439,13 +442,18 @@ static void SendTxData(void)
   uint16_t altitudeGps = 0;
 #endif /* CAYENNE_LPP */
 
+#ifdef USE_AHT20_SENSOR
   if (initAHT20())
   {
 	  readAHT20(&aht20_hum, &aht20_temp);
   }
+#else
+  aht20_hum = 60 + (rand() % 40 - 20);
+  aht20_temp = 23 + (rand() % 10 - 5);
+#endif
 
+#ifdef USE_PMS_SENSOR
   APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: NOW READ\r\n");
-
   if (readPMS()) {
 	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: read ok\r\n");
 	  pms1 = getDataBin(0);
@@ -457,18 +465,16 @@ static void SendTxData(void)
 	  pms25 = 0;
 	  pms10 = 0;
   }
-
-  //EnvSensors_Read(&sensor_data);
-  //temperature = (SYS_GetTemperatureLevel() >> 8);
-  //pressure    = (uint16_t)(sensor_data.pressure * 100 / 10);      /* in hPa / 10 */
+#else
+  pms1 = 500 + (rand() % 300 - 150);
+  pms25 = 200 + (rand() % 100 - 50);
+  pms10 = 100 + (rand() % 10 - 5);
+#endif
 
   AppData.Port = LORAWAN_USER_APP_PORT;
 
 #ifdef CAYENNE_LPP
   CayenneLppReset();
-  //CayenneLppAddBarometricPressure(channel++, pressure);
-  //CayenneLppAddTemperature(channel++, temperature);
-  //CayenneLppAddRelativeHumidity(channel++, (uint16_t)(sensor_data.humidity));
   CayenneLppAddTemperatureFloat(channel++, aht20_temp);
   CayenneLppAddRelativeHumidityFloat(channel++, aht20_hum);
   CayenneLppAddLuminosity(channel++, pms1);
@@ -479,7 +485,6 @@ static void SendTxData(void)
 	  && (LmHandlerParams.ActiveRegion != LORAMAC_REGION_AS923))
   {
 	CayenneLppAddDigitalInput(channel++, GetBatteryLevel());
-	//CayenneLppAddDigitalOutput(channel++, AppLedStateOn);
   }
 
   CayenneLppCopy(AppData.Buffer);

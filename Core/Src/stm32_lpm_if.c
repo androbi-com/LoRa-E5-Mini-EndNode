@@ -29,6 +29,7 @@
   /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 #include "i2c.h"
 #include "sys_app.h"
+#include "sys_conf.h"
   /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 /* USER CODE END Includes */
 
@@ -132,11 +133,13 @@ void PWR_ExitStopMode(void)
   // resume I2C & USART2 after stop mode; maybe this is more than necessary, see for example vcom_Resume()
   MX_I2C2_Init();
   //MX_USART2_UART_Init();
+#ifdef USE_PMS_SENSOR
   if (initPMS()) {
 	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: REINIT OK\r\n");
   } else {
 	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: REINIT FAILED\r\n");
   }
+#endif
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
 

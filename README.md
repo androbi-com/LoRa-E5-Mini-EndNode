@@ -8,9 +8,20 @@ running the STM32 code generation tool Stm32CubeMx undoes some of the
 necessary changes to the code which renders the code with many compilation
 errors.
 
-The code uses an AHT20 humidity and temperature sensor (I use the
-[Adafruit breakout](https://www.adafruit.com/product/4566) with 
-communication over I2C.
+My test setup included 2 types of sensors:
+
+* AHT20 temperatur & humidity  (I use the
+  [Adafruit breakout](https://www.adafruit.com/product/4566)
+  This sensor uses I2C
+* PMS - Particle "counter" which communicates using UART
+
+These sensors can be activated in the code by defining
+
+	#define USE_AHT20_SENSOR
+	#define USE_PMS_SENSOR
+	
+in `Core/inc/sys_conf.h`. Without these defines the sensors are not
+used and random numbers are trasmitted over Lorawan instead.
 
 I have set up this project for the Nucleo STM32WL55 board from scratch
 like it is done in v.1.1.0. There are some important changes with
@@ -25,9 +36,13 @@ and pins necessary to control the radio switch (2 instead of 3).
 
 These code changes have been obtained from the original Seeed 
 v.1.0.0 version at https://github.com/seeed-lora/LoRa-E5-LoRaWAN-End-Node.git
-and have been included as "user code". The I2C2 peripheral has been
-added for communicating with an external sensor. User code is provided for
-initializing and reading the AHT20 sensor (similar to AHT20 arduino library). 
+and have been included as "user code". 
+
+The I2C2 and UART peripherals have been added for communicating with 
+external sensors. User code is provided for initializing and reading 
+the AHT20 sensor (similar to AHT20 arduino library) and for reading out 
+the PMS sensor over UART.
+
 Data is transferred over LoRaWAN in CayenneLPP format, as 
 
 * 10 * temperature in celsius

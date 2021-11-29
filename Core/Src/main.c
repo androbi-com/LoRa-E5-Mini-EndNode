@@ -23,12 +23,21 @@
 #include "i2c.h"
 #include "app_lorawan.h"
 #include "subghz.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdlib.h>
+#include <time.h>
 #include "sys_app.h"
+#include "sys_conf.h"
+#ifdef USE_AHT20_SENSOR
+  #include "aht20.h"
+#endif
+#ifdef USE_PMS_SENSOR
+  //TODO: separate PMS sensor in extra file
+  #include "usart.h"
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -69,7 +78,8 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  // init random var generator for fake sensor readings
+  srand((unsigned) time(NULL));
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -95,12 +105,20 @@ int main(void)
   MX_DMA_Init();
   MX_I2C2_Init();
   MX_USART2_UART_Init();
+  /* USER CODE BEGIN 2 */
+#ifdef USE_PMS_SENSOR
+  // init particle sensor
   if (initPMS()) {
 	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: INIT OK\r\n");
   } else {
 	  APP_LOG(TS_OFF, VLEVEL_M, "\r\n UART: INIT FAILED\r\n");
   }
-  /* USER CODE BEGIN 2 */
+#endif
+
+#ifdef USE_AHT20_SENSOR
+  // tell aht20 lib which i2c to use
+  setI2CHandle(&hi2c2);
+#endif
 
   /* USER CODE END 2 */
 

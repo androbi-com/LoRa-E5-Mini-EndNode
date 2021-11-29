@@ -21,7 +21,6 @@
 #include "i2c.h"
 
 /* USER CODE BEGIN 0 */
-#include "sys_app.h"
 /* USER CODE END 0 */
 
 I2C_HandleTypeDef hi2c2;
@@ -141,99 +140,7 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
 }
 
 /* USER CODE BEGIN 1 */
-/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
-// helper to get status byte from AHT20
-uint8_t getAHT20Status()
-{
-	if (HAL_OK != HAL_I2C_Master_Receive(&hi2c2, AHT20_I2C_ADDRESS<<1, aRxBuffer, 1, 100))
-	{
-		return 0xFF;
-	}
-	return aRxBuffer[0];
-}
-
-// reset and calibrate unit. Returns true if successful
-bool initAHT20()
-{
-	//APP_LOG(TS_ON, VLEVEL_L, "CHECK DEVICE READY\r\n");
-	if (HAL_OK !=  HAL_I2C_IsDeviceReady(&hi2c2, AHT20_I2C_ADDRESS<<1,3,100))
-	{
-		return false;
-	}
-
-	// send soft reset command
-	aTxBuffer[0] = AHT20_CMD_SOFTRESET;
-	//APP_LOG(TS_ON, VLEVEL_L, "SOFT RESET\r\n");
-	if (HAL_OK != HAL_I2C_Master_Transmit(&hi2c2, AHT20_I2C_ADDRESS<<1, aTxBuffer, 1, 100))
-	{
-		return false;
-	}
-	HAL_Delay(20);
-	//APP_LOG(TS_ON, VLEVEL_L, "CALIBRATE\r\n");
-	// send calibration command
-	aTxBuffer[0]=AHT20_CMD_CALIBRATE;
-	aTxBuffer[1]=0x08;
-	aTxBuffer[2]=0x00;
-	if (HAL_OK != HAL_I2C_Master_Transmit(&hi2c2, AHT20_I2C_ADDRESS<<1, aTxBuffer, 3, 100))
-	{
-		return false;
-	}
-
-	// wait while calibrating
-	while (getAHT20Status() & AHT20_STATUS_BUSY) {
-		HAL_Delay(10);
-	}
-
-	// check if calibrated
-	if (! (aRxBuffer[0] & AHT20_STATUS_CALIBRATED)) {
-		return false;
-	}
-	return true;
-}
-
-// read humidity and temperature from sensor
-bool readAHT20(float *humidity, float *temperature)
-{
-	//APP_LOG(TS_ON, VLEVEL_L, "PREPARE CMD\r\n");
-	// send calibration command
-	aTxBuffer[0]=AHT20_CMD_TRIGGER;
-	aTxBuffer[1]=0x33;
-	aTxBuffer[2]=0x00;
-	if (HAL_OK != HAL_I2C_Master_Transmit(&hi2c2, AHT20_I2C_ADDRESS<<1, aTxBuffer, 3, 100))
-	{
-		return false;
-	}
-	// wait while reading
-	//APP_LOG(TS_ON, VLEVEL_L, "WAIT\r\n");
-	while (getAHT20Status() & AHT20_STATUS_BUSY) {
-		HAL_Delay(10);
-	}
-	//APP_LOG(TS_ON, VLEVEL_L, "WAIT DONE\r\n");
-
-	// read 6 bytes
-	if (HAL_OK != HAL_I2C_Master_Receive(&hi2c2, AHT20_I2C_ADDRESS<<1, aRxBuffer, 6, 100))
-	{
-		return false;
-	}
-	uint32_t h = aRxBuffer[1];
-	h <<= 8;
-	h |= aRxBuffer[2];
-	h <<= 4;
-	h |= aRxBuffer[3] >> 4;
-	*humidity = ((float)h*100) / 0x100000;
-
-	uint32_t t = aRxBuffer[3] & 0x0F;
-	t <<= 8;
-	t |= aRxBuffer[4];
-	t <<= 8;
-	t |= aRxBuffer[5];
-	*temperature = ((float)t*200 / 0x100000) - 50;
-
-	return true;
-}
-
-/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

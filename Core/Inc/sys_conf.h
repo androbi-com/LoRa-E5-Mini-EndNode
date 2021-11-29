@@ -45,6 +45,10 @@ extern "C" {
   */
 #define SENSOR_ENABLED              0
 
+// uncomment define to use AHT20 temperature & humidity sensor
+//#define USE_AHT20_SENSOR
+// uncomment define to use Particle sensor
+//#define USE_PMS_SENSOR
 /**
   * @brief  Verbose level for all trace logs
   */
