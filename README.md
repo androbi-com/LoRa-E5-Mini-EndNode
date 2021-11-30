@@ -117,6 +117,12 @@ important is missing in these instructions.
 This software component is licensed by ST under Ultimate Liberty license
 SLA0044, the "License";  https://www.st.com/SLA0044. 
 
+## Note 
+
+This repository is the result of a hackaton at the TTN summer academy 2021,
+a nice opportunity to learn LoRaWAN and meet nice people. I have added
+the slides for the mini presentation we all gave in file `ForestWatcher.odp`.
+
 ## Links
 
 * [The Board](https://wiki.seeedstudio.com/LoRa_E5_mini/)
