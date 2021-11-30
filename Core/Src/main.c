@@ -23,6 +23,7 @@
 #include "i2c.h"
 #include "app_lorawan.h"
 #include "subghz.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -32,11 +33,11 @@
 #include "sys_app.h"
 #include "sys_conf.h"
 #ifdef USE_AHT20_SENSOR
+  // i2c.h inclusion is controlled by device configuration
   #include "aht20.h"
 #endif
 #ifdef USE_PMS_SENSOR
-  //TODO: separate PMS sensor in extra file
-  #include "usart.h"
+  // usart.h inclusion is controlled by device configuration
 #endif
 /* USER CODE END Includes */
 

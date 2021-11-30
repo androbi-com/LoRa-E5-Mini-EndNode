@@ -45,10 +45,6 @@ extern "C" {
   */
 #define SENSOR_ENABLED              0
 
-// uncomment define to use AHT20 temperature & humidity sensor
-//#define USE_AHT20_SENSOR
-// uncomment define to use Particle sensor
-//#define USE_PMS_SENSOR
 /**
   * @brief  Verbose level for all trace logs
   */
@@ -76,6 +72,11 @@ extern "C" {
 #define LOW_POWER_DISABLE           0
 
 /* USER CODE BEGIN EC */
+
+// uncomment define to use AHT20 temperature & humidity sensor
+//#define USE_AHT20_SENSOR
+// uncomment define to use Particle sensor
+//#define USE_PMS_SENSOR
 
 /* USER CODE END EC */
 
