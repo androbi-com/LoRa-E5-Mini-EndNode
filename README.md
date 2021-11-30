@@ -69,7 +69,7 @@ There are 2 ways for changing/configuring this application:
   This is usually your application specific code. 
 
 This separation between generated and user code is what not works well
-in the code provided by Seeed and was the reason to make this app.
+in the original code provided by Seeed and was the reason to make this app.
 
 A little hint: Commit your changes before you run the code generation and
 check with `git status` and `git diff` what the code generation tool has 
@@ -84,15 +84,38 @@ STM32CubeIDE.
 
 ## LoRaWan settings
 
+These can be set from the configuration tool (.ioc file) in STM32CubeIDE,
+selecting "Middleware -> LoraWAN -> LoRaWAN comissioning". These settings
+are (over)written to `se-identity.h` upon code creation. So if you intent to
+use code creation it is probably better to define your keys here instead of
+directly editing `se-identity.h`
+* "App/Join EUI" is mapped to LORAWAN_JOIN_EUI
+* "Application Key" is mapped to LORAWAN_APP_KEY in se-identity.h
+* "Network Key" is mapped to LORAWAN_NWK_KEY
+The "Static Device Address" should not be used anyhow for security reasons
+and thus network and application session keys will not be used.
+
+If you prefer, you can directly edit `se-identity.h` but it will
+be overwritten by code creation. So please don't open an issue "Why does 
+my device not connect anymore after code creation?" :)
+
 ### Settings in "The Things Network" (TTN)
-* TTN "AppEUI" corresponds to LORAWAN_JOIN_EUI in se-identity.h
-* TTN "AppKEY" corresponds to LORAWAN_APP_KEY in se-identity.h
-For your device, in "Payload formatters" use "CayenneLPP".
+
+In order to get accepted by TTN the settings in this application need
+to correspond to your application setup in TTN. The names map as follows
+
+* TTN "AppEUI" corresponds to LORAWAN_JOIN_EUI in `se-identity.h`
+* TTN "DevEUI" corresponds to LORAWAN_DEVICE_EUI in `se-identity.h`
+* TTN "AppKEY" corresponds to LORAWAN_APP_KEY in `se-identity.h`
+
+For your device, in "Payload formatters" use "CayenneLPP". This should
+be enough to get you up and running. Please let me know if something
+important is missing in these instructions.
 
 ## License
 
 This software component is licensed by ST under Ultimate Liberty license
-SLA0044, the "License";  https://www.st.com/SLA0044.
+SLA0044, the "License";  https://www.st.com/SLA0044. 
 
 ## Links
 
